@@ -1,7 +1,7 @@
-// src/pages/Profile.jsx
+
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile } from "../redux/slices/resumeSlice";  // ✅ correct import
+import { fetchProfile } from "../redux/slices/resumeSlice";  
 import ResumeUpload from "../components/ResumeUpload";
 
 const Profile = () => {

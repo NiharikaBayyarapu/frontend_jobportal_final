@@ -7,7 +7,6 @@ export default function ApplyPage() {
   const { jobId } = useParams();
   const token = useSelector((state) => state.auth.token);
 
-  // State for form fields
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,136 +17,214 @@ export default function ApplyPage() {
     resume: null,
   });
 
-  // Handle text inputs
+  const [loading, setLoading] = useState(false);
+
+  // Handle text input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle file upload
+  // Handle file input change
   const handleFileChange = (e) => {
-    setFormData((prev) => ({ ...prev, resume: e.target.files[0] }));
+    const file = e.target.files[0];
+    if (file && file.size > 5 * 1024 * 1024) {
+      alert("File size should be less than 5MB");
+      return;
+    }
+    setFormData((prev) => ({ ...prev, resume: file }));
   };
 
+  // Submit application
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      // Using FormData for file upload
       const data = new FormData();
-      data.append("jobId", jobId);
-      data.append("name", formData.name);
-      data.append("email", formData.email);
-      data.append("qualification", formData.qualification);
-      data.append("percentage", formData.percentage);
-      data.append("address", formData.address);
-      data.append("coverLetter", formData.coverLetter);
-      if (formData.resume) {
-        data.append("resume", formData.resume);
-      }
 
-      await axios.post("http://localhost:5000/api/applications/apply", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
+      // Append jobId explicitly
+      data.append("jobId", jobId);
+
+      // Append fields
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value) {
+          if (key === "resume") {
+            data.append("resume", value); // ensure key matches backend multer field
+          } else {
+            data.append(key, value);
+          }
+        }
       });
 
-      alert("Application submitted ✅");
+      await axios.post(
+        "http://localhost:7000/api/applications/apply",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      alert("✅ Application submitted successfully!");
+
+      // Reset form after successful submission
+      setFormData({
+        name: "",
+        email: "",
+        qualification: "",
+        percentage: "",
+        address: "",
+        coverLetter: "",
+        resume: null,
+      });
     } catch (error) {
-      console.error(error);
-      alert("Error submitting application ❌");
+      console.error("❌ Error submitting application:", error.response?.data || error.message);
+      alert("❌ Error submitting application. Check console for details.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto">
-      <h2 className="text-xl font-bold mb-4">Apply for Job</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-white to-purple-50 p-6">
+      <div className="w-full max-w-2xl bg-white shadow-2xl rounded-2xl p-8 border border-purple-200">
+        <h2 className="text-2xl font-bold text-center text-purple-900 mb-6">
+          Apply for this Job
+        </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Name */}
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Full Name */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-purple-900">
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full p-3 border border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
 
-        {/* Email */}
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+          {/* Email */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-purple-900">
+              Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-3 border border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
 
-        {/* Qualification */}
-        <input
-          type="text"
-          name="qualification"
-          placeholder="Qualification"
-          value={formData.qualification}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+          {/* Qualification */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-purple-900">
+              Qualification
+            </label>
+            <input
+              type="text"
+              name="qualification"
+              value={formData.qualification}
+              onChange={handleChange}
+              className="w-full p-3 border border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+              placeholder="Your qualification"
+              required
+            />
+          </div>
 
-        {/* Percentage */}
-        <input
-          type="number"
-          name="percentage"
-          placeholder="Percentage %"
-          value={formData.percentage}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+          {/* Percentage */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-purple-900">
+              Percentage %
+            </label>
+            <input
+              type="number"
+              name="percentage"
+              value={formData.percentage}
+              onChange={handleChange}
+              className="w-full p-3 border border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-600 outline-none"
+              placeholder="e.g. 85"
+              required
+            />
+          </div>
 
-        {/* Address */}
-        <textarea
-          name="address"
-          placeholder="Address"
-          value={formData.address}
-          onChange={handleChange}
-          rows={3}
-          className="w-full p-2 border rounded"
-          required
-        />
+          {/* Address */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-purple-900">
+              Address
+            </label>
+            <textarea
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              rows={3}
+              className="w-full p-3 border border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+              placeholder="Enter your address"
+              required
+            />
+          </div>
 
-        {/* Cover Letter */}
-        <textarea
-          name="coverLetter"
-          placeholder="Write your cover letter..."
-          value={formData.coverLetter}
-          onChange={handleChange}
-          rows={5}
-          className="w-full p-2 border rounded"
-          required
-        />
+          {/* Cover Letter */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-purple-900">
+              Cover Letter
+            </label>
+            <textarea
+              name="coverLetter"
+              value={formData.coverLetter}
+              onChange={handleChange}
+              rows={5}
+              className="w-full p-3 border border-purple-300 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+              placeholder="Write a brief cover letter..."
+              required
+            />
+          </div>
 
-        {/* Resume Upload */}
-        <input
-          type="file"
-          name="resume"
-          accept=".pdf,.doc,.docx"
-          onChange={handleFileChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+          {/* Resume Upload */}
+          <div>
+            <label className="block mb-1 text-sm font-medium text-purple-900">
+              Upload Resume
+            </label>
+            <input
+              type="file"
+              name="resume"
+              accept=".pdf,.doc,.docx"
+              onChange={handleFileChange}
+              className="w-full border border-purple-300 rounded-xl p-2 cursor-pointer bg-purple-50 
+              file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 
+              file:bg-purple-900 file:text-white hover:file:bg-purple-700"
+              required
+            />
+            {formData.resume && (
+              <p className="text-xs text-purple-700 mt-1">
+                Selected: <span className="font-medium">{formData.resume.name}</span>
+              </p>
+            )}
+          </div>
 
-        <button
-          type="submit"
-          className="bg-purple-900 text-white px-4 py-2 rounded hover:bg-purple-700 w-full"
-        >
-          Submit Application
-        </button>
-      </form>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 text-lg font-semibold rounded-xl bg-gradient-to-r from-purple-900 to-purple-700 text-white 
+            hover:from-purple-800 hover:to-purple-600 transition-all duration-300 disabled:opacity-50"
+          >
+            {loading ? "Submitting..." : "Submit Application"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

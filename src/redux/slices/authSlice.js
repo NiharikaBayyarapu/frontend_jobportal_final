@@ -1,9 +1,8 @@
 import { createSlice} from "@reduxjs/toolkit";
  ;
 
-// --------------------
+
 // Initial State
-// --------------------
 const userFromStorage = localStorage.getItem("token")||null
 
 const initialState = {
@@ -14,9 +13,9 @@ const initialState = {
   role: localStorage.getItem("role") || null,
 };
 
-// --------------------
+
 // Slice
-// --------------------
+
 const authSlice = createSlice({
   name: "auth",
   initialState,

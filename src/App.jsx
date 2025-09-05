@@ -17,12 +17,11 @@ import JobDetailsPage from "./pages/JobDetailsPage";
 import MyApplicationsPage from "./pages/MyApplicationsPage";
 import ApplicantsListPage from "./pages/ApplicantsListPage";
 import About from "./pages/About";
-import JobCategories from "./components/JobCategories";
-import FreshersJobs from "./pages/FreshersJobs";
-import ExperiencedJobs from "./pages/ExperiencedJobs";
-import WomenJobs from "./pages/WomenJobs";
-import WorkFromHomeJobs from "./pages/WorkFromHomeJobs";
+
 import ApplyPage from "./pages/ApplyPage";
+import ManageUsers from "./pages/admin/ManageUsers";
+import ManageJobs from "./pages/admin/ManageJobs";
+import Dashboard from "./pages/Dashboard";
 
 function Profile() {
   return <div className="p-8">Logged in: Profile page</div>;
@@ -45,14 +44,13 @@ export default function App() {
            <Route path="/services" element={<Services />} />
              <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} /> {/* ✅ About route */}
-              {/* Homepage */}
-        <Route path="/" element={<JobCategories />} />
+              <Route path="/manage-users" element={<ProtectedRoute><ManageUsers /></ProtectedRoute>} />
+          <Route path="/manage-jobs" element={<ProtectedRoute><ManageJobs /></ProtectedRoute>} />
 
+              {/* Homepage */}
+        
         {/* Job category routes */}
-        <Route path="/jobs/freshers" element={<FreshersJobs />} />
-        <Route path="/jobs/experienced" element={<ExperiencedJobs />} />
-        <Route path="/jobs/women" element={<WomenJobs />} />
-        <Route path="/jobs/work-from-home" element={<WorkFromHomeJobs />} />
+        
          <Route path="/apply/:jobId" element={<ApplyPage />} />
 
 
@@ -76,12 +74,14 @@ export default function App() {
             }
           />
 
-          {/* Protected recruiter/admin routes */}
+          
+          
+          {/* ✅ Unified Dashboard (Seeker + Recruiter + Admin) */}
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <RecruiterDashboard />
+                <Dashboard />
               </ProtectedRoute>
             }
           />

@@ -18,8 +18,8 @@ export default function JobsPage({ jobs }) {
         <JobCard
           key={job._id}
           job={job}
-          onApply={handleApply}    // ✅ function passed here
-          onDelete={handleDelete}  // ✅ function passed here
+          onApply={handleApply}    //  function passed here
+          onDelete={handleDelete}  //  function passed here
         />
       ))}
     </div>

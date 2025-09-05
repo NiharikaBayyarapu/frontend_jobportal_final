@@ -2,15 +2,16 @@ import { useState } from "react";
 import {
   Bookmark,
   BookmarkCheck,
-  Trash2,
   MapPin,
   Briefcase,
   IndianRupee,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function JobCard({ job, onApply, onDelete }) {
+export default function JobCard({ job, status }) {
   const [bookmarked, setBookmarked] = useState(false);
+
+  const isApplied = !!status; // ✅ true if already applied
 
   return (
     <div className="border rounded-2xl p-6 shadow-md bg-white hover:shadow-lg transition duration-300 flex flex-col justify-between">
@@ -18,18 +19,22 @@ export default function JobCard({ job, onApply, onDelete }) {
       <div className="flex items-start justify-between">
         <div>
           {/* Company + Title */}
-          <h3 className="text-lg font-bold text-gray-900">{job.company}</h3>
-          <p className="text-xl font-semibold text-black-900">{job.title}</p>
+          <h3 className="text-lg font-bold text-gray-900">{job?.company}</h3>
+          <p className="text-xl font-semibold text-black-900">{job?.title}</p>
 
-          {/* Location + Type */}
-          <div className="flex gap-3 mt-2 text-sm text-gray-600">
-            <span className="flex items-center gap-1">
-              <MapPin className="w-4 h-4" /> {job.location}
-            </span>
-            <span className="flex items-center gap-1">
-              <Briefcase className="w-4 h-4" /> {job.type}
-            </span>
-            {job.salary && (
+          {/* Location + Type + Salary */}
+          <div className="flex gap-3 mt-2 text-sm text-gray-600 flex-wrap">
+            {job?.location && (
+              <span className="flex items-center gap-1">
+                <MapPin className="w-4 h-4" /> {job.location}
+              </span>
+            )}
+            {job?.type && (
+              <span className="flex items-center gap-1">
+                <Briefcase className="w-4 h-4" /> {job.type}
+              </span>
+            )}
+            {job?.salary && (
               <span className="flex items-center gap-1">
                 <IndianRupee className="w-4 h-4" /> {job.salary}
               </span>
@@ -51,24 +56,25 @@ export default function JobCard({ job, onApply, onDelete }) {
       </div>
 
       {/* Description */}
-      <p className="text-gray-700 text-sm mt-4 leading-relaxed">
-        {job.description?.slice(0, 150)}...
-      </p>
+      {job?.description && (
+        <p className="text-gray-700 text-sm mt-4 leading-relaxed">
+          {job.description.slice(0, 150)}...
+        </p>
+      )}
 
       {/* Actions */}
       <div className="mt-5 flex items-center gap-3">
-        <button className="flex-1 bg-purple-900 text-white py-2 rounded-xl hover:bg-purple-800 transition font-medium">
-  <Link to={`/apply/${job._id}`} className="block w-full h-full">
-    Apply Now
-  </Link>
-</button>
-
-        <button
-          onClick={() => onDelete(job._id)}
-          className="p-2 rounded-xl bg-red-100 hover:bg-red-200 text-red-600 transition"
-        >
-          <Trash2 className="w-5 h-5" />
-        </button>
+        {isApplied ? (
+          <span className="flex-1 text-center py-2 rounded-xl font-medium bg-purple-900 text-white">
+            {status || "Applied"}
+          </span>
+        ) : (
+          <button className="flex-1 bg-purple-900 text-white py-2 rounded-xl hover:bg-purple-800 transition font-medium">
+            <Link to={`/apply/${job._id}`} className="block w-full h-full">
+              Apply Now
+            </Link>
+          </button>
+        )}
       </div>
     </div>
   );

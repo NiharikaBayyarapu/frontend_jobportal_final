@@ -1,8 +1,7 @@
 import React from 'react';
 
 export default function JobFilters({ filters, setFilters }) {
-  // filters is an object like { location, jobType, salaryRange }
-  // setFilters updates the filters in parent component or redux
+  
 
   const handleChange = (e) => {
     setFilters(prev => ({

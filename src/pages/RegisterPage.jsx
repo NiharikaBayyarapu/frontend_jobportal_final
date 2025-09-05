@@ -1,4 +1,4 @@
-// src/pages/RegisterPage.jsx
+
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";//to call backend-api's
@@ -6,7 +6,7 @@ import {registerAPI} from "../API's.js";//stored api routes
 
 import { useNavigate, Link } from "react-router-dom";//routing purposes
 
-const roles = ["jobseeker", "recruiter", "admin"]; // ✅ recruiter (not employer)
+const roles = ["jobseeker", "recruiter", "admin"]; //  recruiter (not employer)
 
 function RegisterPage() {
   const [form, setForm] = useState({

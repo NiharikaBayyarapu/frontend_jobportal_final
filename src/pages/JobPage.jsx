@@ -11,7 +11,7 @@ export default function JobsPage() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/jobs"); // ✅ use same port
+        const res = await axios.get("http://localhost:7000/api/jobs"); 
         setJobs(res.data);
       } catch (err) {
         console.error("Error fetching jobs:", err);

@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Reviews from "../components/Reviews";
 function Home() {
   const navigate = useNavigate();
   const scrollRef = useRef(null);
@@ -11,6 +12,24 @@ function Home() {
     const exp = e.target.exp.value;
     navigate(`/jobs?job=${job}&location=${location}&exp=${exp}`);
   };
+  const jobTypes = [
+    {
+      title: "Full-Time",
+      img: "https://img.icons8.com/color/96/briefcase.png",
+    },
+    {
+      title: "Part-Time",
+      img: "https://img.icons8.com/color/96/clock.png",
+    },
+    {
+      title: "Contract",
+      img: "https://img.icons8.com/color/96/contract-job.png",
+    },
+    {
+      title: "Remote",
+      img: "https://img.icons8.com/color/96/laptop.png",
+    },
+  ];
 
   // ✅ Companies List
   const companies = [
@@ -82,7 +101,7 @@ function Home() {
           </h2>
 
           <h1 className="text-4xl md:text-5xl font-extrabold text-white-900 leading-snug">
-            Find the <span className="text-white-900">Right Job</span> for You
+            Your Job <span className="text-white-900">Search</span> Ends Here
           </h1>
           <p className="mt-4 text-base md:text-lg text-white-900">
             Explore thousands of opportunities and build your career with
@@ -123,6 +142,30 @@ function Home() {
 
         </div>
       </div>
+{/* ✅ Job Types Section (clickable, client-side only) */}
+<section className="px-6 md:px-16 py-16 bg-gray-50">
+  <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
+    Explore by <span className="text-purple-600">Job Types</span>
+  </h2>
+
+  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+    {jobTypes.map((job, index) => (
+      <button
+        key={index}
+        onClick={() => navigate(`/jobs?type=${encodeURIComponent(job.title.toLowerCase().replace(/\s+/g, ''))}`)}
+        className="rounded-2xl p-8 text-center shadow-lg bg-gradient-to-br from-purple-50 to-white hover:from-purple-100 hover:to-white transform hover:-translate-y-2 transition duration-300 focus:outline-none focus:ring-4 focus:ring-purple-200"
+        aria-label={`View ${job.title} jobs`}
+      >
+        {/* keep your image */}
+        <div className="mx-auto w-24 h-24 flex items-center justify-center rounded-xl bg-white shadow-md mb-5">
+          <img src={job.img} alt={job.title} className="w-12 h-12" />
+        </div>
+
+        <h3 className="text-xl font-semibold text-gray-800">{job.title}</h3>
+      </button>
+    ))}
+  </div>
+</section>
 
       {/* ✅ Top Companies Carousel with Side Arrows */}
       <div className="relative bg-white py-12">
@@ -198,6 +241,11 @@ function Home() {
         >
           →
         </button>
+         <>
+      {/* Other sections */}
+      <Reviews />
+      {/* Footer */}
+    </>
       </div>
     </div>
   );

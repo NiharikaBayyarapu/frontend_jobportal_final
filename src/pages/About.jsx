@@ -1,136 +1,95 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import axios from "axios";
-
-export default function ApplyPage() {
-  const { jobId } = useParams();
-  const token = useSelector((state) => state.auth.token);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    qualification: "",
-    percentage: "",
-    address: "",
-    coverLetter: "",
-    resume: null,
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, resume: e.target.files[0] });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const data = new FormData();
-    data.append("jobId", jobId);
-    data.append("name", formData.name);
-    data.append("email", formData.email);
-    data.append("qualification", formData.qualification);
-    data.append("percentage", formData.percentage);
-    data.append("address", formData.address);
-    data.append("coverLetter", formData.coverLetter);
-
-    if (formData.resume) {
-      data.append("resume", formData.resume);
-    }
-
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/applications/apply",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      alert("Application submitted ✅");
-      console.log("Server response:", res.data);
-    } catch (error) {
-      console.error("❌ Error submitting application:", error.response?.data || error.message);
-      alert("Error submitting application ❌");
-    }
-  };
-
+// pages/About.jsx
+export default function About() {
   return (
-    <div className="p-6 max-w-lg mx-auto">
-      <h2 className="text-xl font-bold mb-4">Apply for Job</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          className="w-full p-2 border rounded"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          className="w-full p-2 border rounded"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="qualification"
-          placeholder="Qualification"
-          className="w-full p-2 border rounded"
-          value={formData.qualification}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="percentage"
-          placeholder="Percentage"
-          className="w-full p-2 border rounded"
-          value={formData.percentage}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Address"
-          className="w-full p-2 border rounded"
-          value={formData.address}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="coverLetter"
-          placeholder="Write your cover letter..."
-          className="w-full p-2 border rounded"
-          rows={5}
-          value={formData.coverLetter}
-          onChange={handleChange}
-        />
-        <input
-          type="file"
-          accept=".pdf,.doc,.docx"
-          className="w-full"
-          onChange={handleFileChange}
-          required
-        />
-        <button
-          type="submit"
-          className="bg-purple-900 text-white px-4 py-2 rounded hover:bg-purple-700 w-full"
-        >
-          Submit Application
-        </button>
-      </form>
+    <div className="container mx-auto px-6 py-12">
+      {/* Heading */}
+      <h2 className="text-4xl font-bold text-black-900 mb-6 text-center">
+        About Us
+      </h2>
+
+      {/* Intro */}
+      <p className="text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto text-center">
+        Welcome to <span className="font-semibold">Job Portal</span>!  
+        Our mission is to connect talented job seekers with top employers.  
+        We aim to make the hiring process simple, efficient, and transparent for both companies and candidates.
+      </p>
+
+      {/* Vision / Mission / Values */}
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="p-6 bg-white rounded-2xl shadow-md">
+          <h3 className="text-xl font-semibold text-purple-900">Our Vision</h3>
+          <p className="text-gray-600 mt-2">
+            To be the leading platform that bridges the gap between job seekers
+            and employers across industries.
+          </p>
+        </div>
+
+        <div className="p-6 bg-white rounded-2xl shadow-md">
+          <h3 className="text-xl font-semibold text-purple-900">Our Mission</h3>
+          <p className="text-gray-600 mt-2">
+            Empower individuals by providing the right opportunities and help
+            businesses grow with the right talent.
+          </p>
+        </div>
+
+        <div className="p-6 bg-white rounded-2xl shadow-md">
+          <h3 className="text-xl font-semibold text-purple-900">Our Values</h3>
+          <p className="text-gray-600 mt-2">
+            Integrity, innovation, and inclusivity are the pillars of our
+            platform.
+          </p>
+        </div>
+      </div>
+
+      {/* ✅ Proof / Achievements Section */}
+      <div className="mt-16 text-center">
+        <h3 className="text-3xl font-bold text-black-900">Our Achievements</h3>
+        <p className="text-gray-600 mt-2">
+          Trusted by thousands of professionals and companies worldwide.
+        </p>
+
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="p-6 bg-purple-100 rounded-2xl shadow-md">
+            <h4 className="text-4xl font-bold text-purple-900">50K+</h4>
+            <p className="text-gray-700 mt-2">Active Job Seekers</p>
+          </div>
+
+          <div className="p-6 bg-purple-100 rounded-2xl shadow-md">
+            <h4 className="text-4xl font-bold text-purple-900">10K+</h4>
+            <p className="text-gray-700 mt-2">Verified Companies</p>
+          </div>
+
+          <div className="p-6 bg-purple-100 rounded-2xl shadow-md">
+            <h4 className="text-4xl font-bold text-purple-900">95%</h4>
+            <p className="text-gray-700 mt-2">Successful Placements</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ✅ Testimonials Section */}
+      <div className="mt-16">
+        <h3 className="text-3xl font-bold text-black-900 text-center">
+          What People Say
+        </h3>
+
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="p-6 bg-white rounded-2xl shadow-md">
+            <p className="text-gray-700 italic">
+              "Job Portal helped me land my dream job within weeks. The process
+              was smooth and transparent."
+            </p>
+            <h4 className="mt-4 font-semibold text-purple-900">– Priya Sharma</h4>
+          </div>
+
+          <div className="p-6 bg-white rounded-2xl shadow-md">
+            <p className="text-gray-700 italic">
+              "As an employer, we found highly skilled candidates quickly.
+              Definitely recommend this platform."
+            </p>
+            <h4 className="mt-4 font-semibold text-purple-900">– TechCorp HR</h4>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

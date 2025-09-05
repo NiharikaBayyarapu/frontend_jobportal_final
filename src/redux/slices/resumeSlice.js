@@ -1,4 +1,4 @@
-// src/redux/slices/resumeSlice.js
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { profileAPI } from "../../api/authAPI";
 import { uploadResumeAPI } from "../../api/resumeAPI";

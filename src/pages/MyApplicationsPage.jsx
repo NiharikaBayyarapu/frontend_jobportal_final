@@ -1,45 +1,46 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getMyApplications } from "../redux/slices/jobSlice";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import JobCard from "../components/JobCard";
 import { toast } from "react-toastify";
+import API from "../api/axiosAPI";
 
 export default function MyApplicationsPage() {
-  const dispatch = useDispatch();
-
-  const { userInfo } = useSelector((state) => state.auth);
-  const { myApplications, loading, error } = useSelector((state) => state.jobs);
+  const { token } = useSelector((state) => state.auth);
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (userInfo?._id && userInfo?.token) {
-      dispatch(getMyApplications({ userId: userInfo._id, token: userInfo.token }))
-        .unwrap()
-        .catch((err) => {
-          toast.error(err || "Failed to load applications");
+    const fetchApplications = async () => {
+      try {
+        setLoading(true);
+        const { data } = await API.get("/applications/my", {
+          headers: { Authorization: `Bearer ${token}` },
         });
-    }
-  }, [dispatch, userInfo]);
+        setApplications(data.applications || []);
+      } catch (err) {
+        console.error("Error fetching applications:", err);
+        toast.error("Failed to load applications");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (loading) {
-    return <p className="p-4">Loading your applications...</p>;
-  }
+    if (token) fetchApplications();
+  }, [token]);
 
-  if (error) {
-    return <p className="p-4 text-red-500">{error}</p>;
-  }
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">My Applications</h2>
-
-      {myApplications && myApplications.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {myApplications.map((job) => (
-            <JobCard key={job._id} job={job} />
+    <div className="max-w-5xl mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-6">My Applications</h2>
+      {applications.length === 0 ? (
+        <p className="text-gray-600">No applications yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {applications.map((app) => (
+            <JobCard key={app._id} job={app.job} status={app.status} />
           ))}
         </div>
-      ) : (
-        <p>You haven't applied to any jobs yet.</p>
       )}
     </div>
   );
