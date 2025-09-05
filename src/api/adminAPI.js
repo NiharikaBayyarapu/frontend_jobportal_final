@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "https://backend-jobportal-final-4.onrender.com/api" });
+const API = axios.create({ baseURL: "https://backend-jobportal-final-2.onrender.com/api" });
 
 // Attach token
 API.interceptors.request.use((req) => {
