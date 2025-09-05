@@ -13,4 +13,5 @@ export default defineConfig({
       },
     },
   },
+  VITE_BASE_PATH: process.env.VITE_BASE_PATH || '/frontend_jobportal_final',
 });

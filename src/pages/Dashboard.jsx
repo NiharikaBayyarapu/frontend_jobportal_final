@@ -36,7 +36,8 @@ export default function Dashboard() {
                 headers: { Authorization: `Bearer ${token}` },
               });
               applicantsData[job._id] = resApp.data.applications || [];
-            } catch {
+            } catch(error) {
+              console.log(error)
               applicantsData[job._id] = [];
             }
           }
@@ -64,7 +65,8 @@ export default function Dashboard() {
         ),
       }));
       toast.success(`Application ${status}`);
-    } catch {
+    } catch (error){
+      console.log(error)
       toast.error("Error updating status");
     }
   };

@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // ✅ Base URL for applications API
-const API = axios.create({ baseURL: "http://localhost:5000/api/applications" });
+const API = axios.create({ baseURL: "http://localhost:7000/api/applications" });
 
 // 🔑 Attach token to every request
 API.interceptors.request.use((req) => {
