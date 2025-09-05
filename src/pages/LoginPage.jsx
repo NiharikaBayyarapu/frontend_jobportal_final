@@ -21,6 +21,7 @@ function LoginPage() {
     e.preventDefault();
     try{
       const response = await axios.post("https://backend-jobportal-final-2.onrender.com/api/auth/login", form);
+      console.log(response.data);
       if(response.status === 200) {
         dispatch(addUser(response.data));
         localStorage.setItem("token", response.data.token);
