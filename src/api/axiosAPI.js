@@ -3,7 +3,7 @@ import axios from "axios";
 
 // ✅ Create a single axios instance
 const API = axios.create({
-  baseURL: "https://backend-jobportal-final-2.onrender.com/api/v1", 
+  baseURL: "https://backend-jobportal-final-2.onrender.com/api", 
   // Example: .env → VITE_API_BASE_URL=http://localhost:7000/api/v1
 });
 
