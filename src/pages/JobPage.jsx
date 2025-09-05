@@ -11,7 +11,7 @@ export default function JobsPage() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("http://localhost:7000/api/jobs"); 
+        const res = await axios.get("https://backend-jobportal-final-4.onrender.com/"); 
         setJobs(res.data);
       } catch (err) {
         console.error("Error fetching jobs:", err);
@@ -29,7 +29,7 @@ export default function JobsPage() {
   // Handle Delete
   const handleDelete = async (jobId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/jobs/${jobId}`);
+      await axios.delete(`https://backend-jobportal-final-4.onrender.com//api/jobs/${jobId}`);
       setJobs((prev) => prev.filter((job) => job._id !== jobId));
     } catch (err) {
       console.error("Error deleting job:", err);
