@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:7000/api/admin" });
+const API = axios.create({ baseURL: "https://backend-jobportal-final-4.onrender.com/" });
 
 // Attach token
 API.interceptors.request.use((req) => {
